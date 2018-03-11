@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app">
-    <v-header>
+    <v-header :seller='seller' v-class="v-header">
 
     </v-header>
     <div class="tab border-1px">
@@ -31,15 +31,29 @@
 <script>
 import header from '@/components/header/header.vue';
 
+const ERR_OK = 0; 
 export default {
   name: 'app',
   components: {
     'v-header': header
+  },
+  data() {
+    return {
+      seller: {}
+    }
+  },
+  created(){
+    this.axios.get('/api/seller').then(response => {
+      let data = response.data;
+      if(data.erron === ERR_OK){
+        this.seller = data.data
+      }
+    });
   }
 }
 </script>
 
-<style lang='stylus'>
+<style lang='stylus' scoped>
   @import "./common/stylus/mixin.styl"
   #app
     .tab
@@ -57,4 +71,8 @@ export default {
           color: rgb(77, 85, 93)
           &.active
             color: rgb(240, 20, 20)
+  .avatar
+    border: 3px solid red
+    img
+      border: 3px solid green
 </style>
